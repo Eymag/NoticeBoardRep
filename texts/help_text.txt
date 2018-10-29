@@ -1,0 +1,50 @@
+﻿1. EXEMPEL ENSTAKA HÄNDELSE 
+2. EXEMPEL ÅTERKOMMANDE HÄNDELSER 
+3. SYNTAX FÖR MEDDELANDE 
+4. EXTRA FUNKTIONER
+---
+
+1. EXEMPEL ENSTAKA HÄNDELSE:
+[2017-04-13 12:00 ; 2017-04-20 08:00] Tar påskledigt och kommer tillbaka på onsdag. Trevlig helg!
+-visas fram till kl 08:00 på onsdagen efter påsk.
+[2017-04-13] Jag tar ledigt på skärtorsdagen, ses igen efter påsk. Trevlig Helg!
+-visas hela skärtorsdagen 13 april.
+[onsdag ; torsdag] Jag åker till Göteborg på kurs i två dagar.
+-visas från aktuellt datum till nästkommande torsdag.
+Jag åker till Göteborg över dagen på kurs.
+-visas samma dag.
+
+2. EXEMPEL ÅTERKOMMANDE HÄNDELSER:
+[torsdagar 13:00 ; fredagar 17:00] Jag är föräldraledig torsdag em och fredagar.
+-ligger som permanent meddelande.
+[torsdagar] Jag är föräldraledig torsdagar.
+-ligger som permanent meddelande.
+
+3. SYNTAX FÖR MEDDELANDE
+[Giltigt från ; Giltigt till] Ditt meddelande
+
+Giltighetstid med datum och klockslag:
+[ÅÅÅÅ-MM-DD tt:mm ; ÅÅÅÅ-MM-DD tt:mm]
+-visas fram till angivet datum och klockslag
+[ÅÅÅÅ-MM-DD tt:mm]
+-visas fram till och med aktuellt datum.
+[ÅÅÅÅ-MM-DD]
+-visas fram till och med aktuellt datum.
+[tt:mm ; tt:mm]
+-visas fram till angivet klockslag.
+[tt:mm]
+-visas under aktuell dag.
+
+Giltighetstid i klarspråk:
+[torsdag tt:mm ; fredag tt:mm]
+-visas fram till nästkommande fredag kl tt:mm.
+[torsdagar ; fredagar] 
+-ligger som permanent meddelande.
+[torsdag]
+-visas fram till och med nästkommande torsdag.
+[torsdagar] 
+-ligger som permanent meddelande.
+
+4. EXTRA FUNKTIONER
+<help> : returnerar hjälptexten.
+<list> : returnerar aktuell information på anslagstavlan.

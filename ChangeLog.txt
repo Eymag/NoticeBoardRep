@@ -1,0 +1,40 @@
+﻿Release 3.2
+Corrected wind direction
+Removed decimal for wind speed and temperature
+Added city and time information for weather data
+
+Release 3.1
+Weather icons
+
+Release 3.0
+Using current weather data from SMHI instead of historical
+Added comments
+Added Docstrings
+Added Logging
+Added improved stability fixes to updates
+
+Release 2.9
+Separate update threads for notices and sidebar.
+Rewrite of config file format.
+Added more options to config files.
+Moved mailserver config to config files
+Fixed faulty sent message added message.
+
+Release 2.8
+Removed trace print of timestamp.
+Added threaded update.
+Added catch of connection error for exchange server connection
+
+Release 2.7
+Info sidebar updates
+Added weather to info sidebar
+
+Release 2.6
+Fix of crash bug when empty subject received
+Added info sidebar
+
+Release 2.5
+Bug fix - Crash when two instances of message board tries to save read status at the same time.
+Dynamic handling of notice size
+Release 2.4
+<delete> command added - Possibilitiy for user to remove an event from NoticeBoard
