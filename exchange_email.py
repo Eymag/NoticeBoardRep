@@ -133,7 +133,8 @@ class Email():
         l = logging.getLogger(__name__)
         if not isinstance(message, exchangelib.items.Message):
             l.warning('Message not a correct message {}'.format(message))
-            return
+            return     
+
         if not message.subject:
             l.warning('Message does not contain a subject')
             return
