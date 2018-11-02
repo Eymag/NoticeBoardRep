@@ -1,6 +1,6 @@
 import getpass
 import exchangelib
-import email, email.policy, email.header
+import email, email.policy, email.header, email.utils
 import re
 import os
 import datetime
@@ -85,9 +85,10 @@ class Email():
                             pass
                         #Adding a event that only contains the mail message
                         #will trigger removal of it.
-                        e = event.Event()
-                        e.email = message
-                        events.append(e)
+                        if not (message.is_read or self.isreply(message)):
+                            e = event.Event()
+                            e.email = message
+                            events.append(e)
                         continue
                     #Check if its a command and if its valid
                     result =  self.parse_command(message)
@@ -115,12 +116,13 @@ class Email():
                             message.is_read = True
                             message.save()
                             self.send(to, subject, ''.join(msg))
+                            self.send_subscriptions(events, new_messages)
         except exchangelib.errors.ErrorInternalServerTransientError:
             l.warning('Get events failed', exc_info=True)
             return None,None
 
         self.last_update_time = datetime.datetime.now()
-        self.send_subscriptions(events, new_messages)
+        #self.send_subscriptions(events, new_messages)
         return events, commands
 
     def parse_command(self, message):
@@ -158,7 +160,7 @@ class Email():
             logging.getLogger(__name__).error('Error in checking for valid mail address', exc_info=True)
 
     def isreply(self, message):
-        return ('SE-GOT-EX02.semcon.se' in message.message_id) or 'Message added to notice board' in message.subject
+        return (('SE-GOT-EX02.semcon.se' in message.message_id) or ('Message added to notice board' in message.subject))
 
     def create_mailbox(self, server, name):
         '''Create a new folder on server

@@ -1,4 +1,9 @@
-﻿Release 3.2
+﻿Release 3.6
+Added condition for validation of events to avoid autoreply notice.
+Added condition for timestamp validation to cover more faulty timestamps.
+Changed to from Google-maps to Nominatim for fetching OSM data.
+
+Release 3.2
 Corrected wind direction
 Removed decimal for wind speed and temperature
 Added city and time information for weather data
