@@ -85,7 +85,7 @@ class Email():
                             pass
                         #Adding a event that only contains the mail message
                         #will trigger removal of it.
-                        if not (message.is_read or self.isreply(message)):
+                        if not (self.isreply(message)):
                             e = event.Event()
                             e.email = message
                             events.append(e)
