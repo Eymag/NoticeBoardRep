@@ -1,11 +1,12 @@
 import getpass
-import exchangelib
+import exchangelib 
+from exchangelib.account import Account
 import email, email.policy, email.header, email.utils
 import re
 import os
 import datetime
 import logging
-import configparser
+import configparser  
 
 import event
 
@@ -85,10 +86,10 @@ class Email():
                             pass
                         #Adding a event that only contains the mail message
                         #will trigger removal of it.
-                        if not (self.isreply(message)):
-                            e = event.Event()
-                            e.email = message
-                            events.append(e)
+                        
+                        e = event.Event()
+                        e.email = message
+                        events.append(e)
                         continue
                     #Check if its a command and if its valid
                     result =  self.parse_command(message)
