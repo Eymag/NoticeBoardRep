@@ -59,7 +59,7 @@ class Event():
                     self.start.valid and
                     self.end and
                     self.end.valid and
-                    not (('Message added to notice board' in self.email.subject) or ('SE-GOT-EX02.semcon.se' in self.message) or ('Autosvar:' in self.message)) and
+                    not (('Message added to notice board' in self.email.subject) or ('SE-GOT-EX02.semcon.se' in self.message) or ('Autosvar:' in self.email.subject)) and
                     not self.end.expired)
     def visible(self):
         '''Reocurring messages are only shown on the day

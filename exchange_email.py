@@ -98,6 +98,7 @@ class Email():
                         l.debug('Proccessing: {}'.format(result))
                         if result[0]:
                             commands.append(result)
+
                         else:
                             print(result[1], result[2])
                     else:
@@ -303,11 +304,13 @@ class Email():
             return (False, 'list', [err, message])
         else:
             return (True, 'list', [message.sender.email_address])
+
     def subscribe(self, message, *args):
         def handle_subscription(address, subscription, subscription_type):
             if subscription_type == 'unsubscribe':
                 for section in subscription.sections():
                     subscription.remove_option(section, address)
+                   
             else:
                 try:
                     subscription.add_section(subscription_type)
