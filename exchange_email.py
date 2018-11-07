@@ -317,7 +317,7 @@ class Email():
                 except configparser.DuplicateSectionError:
                     pass
                 subscription.set(subscription_type, address, 'None')
-
+            self.delete(message)
         os.makedirs('subscriptions', exist_ok=True)    
         subscriptions = configparser.ConfigParser()
         subscriptions.read('subscriptions/user_subscriptions.ini')
