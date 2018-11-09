@@ -59,6 +59,7 @@ class Event():
                     self.start.valid and
                     self.end and
                     self.end.valid and
+                    not (('Message added to notice board' in self.email.subject) or ('SE-GOT-EX02.semcon.se' in self.message) or ('Autosvar:' in self.email.subject)) and
                     not self.end.expired)
     def visible(self):
         '''Reocurring messages are only shown on the day
@@ -128,7 +129,7 @@ class Event():
             self.end = end
             
         else:
-            error = 'Timestamp1: {} and Timestamp2: {} has different lenght'.format(timestamp[0], timestamp[1])
+            error = 'Timestamp1: {} and Timestamp2: {} has different length'.format(timestamp[0], timestamp[1])
             print(error)
             self.fail_reasons.append(error)
             return
@@ -304,6 +305,9 @@ class Timestamp():
                 year = date.year
                 month = date.month
                 day = d[0]
+            else:
+                print('Faulty timestamp ' + timestamp[0])
+                return
             
             if isinstance(year, str) and len(year) == 2:year = '20'+year
             if len(timestamp) == 2:

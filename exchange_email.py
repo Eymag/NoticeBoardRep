@@ -1,11 +1,12 @@
 import getpass
-import exchangelib
-import email, email.policy, email.header
+import exchangelib 
+from exchangelib.account import Account
+import email, email.policy, email.header, email.utils
 import re
 import os
 import datetime
 import logging
-import configparser
+import configparser  
 
 import event
 
@@ -85,6 +86,7 @@ class Email():
                             pass
                         #Adding a event that only contains the mail message
                         #will trigger removal of it.
+                        
                         e = event.Event()
                         e.email = message
                         events.append(e)
@@ -96,6 +98,7 @@ class Email():
                         l.debug('Proccessing: {}'.format(result))
                         if result[0]:
                             commands.append(result)
+
                         else:
                             print(result[1], result[2])
                     else:
@@ -109,18 +112,19 @@ class Email():
                             subject = 'Message added to notice board'
                             msg = ['Message with subject: ', message.subject,
                                    ' has been added to NoticeBoard', '\n\n',
-                                   'Send a mail with the following subject'
-                                   ' line to delete:','\n', '<delete>',
-                                   message.item_id]
+                                   'Send a delete-mail to remove the message from notice board. ',
+                                   'Press the following link to generate the correct subject format for the delete-mail: mailto:SE-LIN-TAVLAN@semcon.com?subject=%3Cdelete%3E{}'.format(message.item_id[:-1]),
+                                   '%3D' ,'\n']
                             message.is_read = True
                             message.save()
                             self.send(to, subject, ''.join(msg))
+                            self.send_subscriptions(events, new_messages)
         except exchangelib.errors.ErrorInternalServerTransientError:
             l.warning('Get events failed', exc_info=True)
             return None,None
 
         self.last_update_time = datetime.datetime.now()
-        self.send_subscriptions(events, new_messages)
+        #self.send_subscriptions(events, new_messages)
         return events, commands
 
     def parse_command(self, message):
@@ -133,7 +137,8 @@ class Email():
         l = logging.getLogger(__name__)
         if not isinstance(message, exchangelib.items.Message):
             l.warning('Message not a correct message {}'.format(message))
-            return
+            return     
+
         if not message.subject:
             l.warning('Message does not contain a subject')
             return
@@ -157,7 +162,7 @@ class Email():
             logging.getLogger(__name__).error('Error in checking for valid mail address', exc_info=True)
 
     def isreply(self, message):
-        return ('SE-GOT-EX02.semcon.se' in message.message_id) or 'Message added to notice board' in message.subject
+        return (('SE-GOT-EX02.semcon.se' in message.message_id) or ('Message added to notice board' in message.subject))
 
     def create_mailbox(self, server, name):
         '''Create a new folder on server
@@ -299,18 +304,20 @@ class Email():
             return (False, 'list', [err, message])
         else:
             return (True, 'list', [message.sender.email_address])
+
     def subscribe(self, message, *args):
         def handle_subscription(address, subscription, subscription_type):
             if subscription_type == 'unsubscribe':
                 for section in subscription.sections():
                     subscription.remove_option(section, address)
+                   
             else:
                 try:
                     subscription.add_section(subscription_type)
                 except configparser.DuplicateSectionError:
                     pass
                 subscription.set(subscription_type, address, 'None')
-
+            self.delete(message)
         os.makedirs('subscriptions', exist_ok=True)    
         subscriptions = configparser.ConfigParser()
         subscriptions.read('subscriptions/user_subscriptions.ini')
