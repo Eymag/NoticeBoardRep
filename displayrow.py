@@ -1,6 +1,13 @@
 import tkinter
-import PIL
+import PIL 
+from PIL import Image, ImageTk
 import random
+import io
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
+
 
 class DisplayRow():
     '''Class to controll one row of notices'''
@@ -67,6 +74,7 @@ class DisplayRow():
         '''Display events
 
         returns remaining events that does not fit on row'''
+        print(events)
         if not self.widgets:self.make_widgets()
         num = min(len(self.widgets), len(events))
         for index in range(self.cols):
@@ -97,7 +105,32 @@ class DisplayRow():
                   
     def create_note(self, event):
         '''Creates a single note'''
+        
         width, padd_width, height, padd_height = self.get_size()
+        if event.email.attachments:
+           for attach in event.email.attachments:
+                    
+                    img = attach.content
+                    #image = Image.frombytes('RGBA', (300,300), img)
+                    
+                    attImg = Image.open(io.BytesIO(img))
+                    w,h = attImg.size 
+                    left = (w - width)/2
+                    top = (h - height)/2
+                    right = (w + width)/2
+                    bottom = (h + height)/2
+
+                  
+                    image= attImg.crop((left, top, right, bottom))
+                    #image = attImg.resize((width, height), Image.ANTIALIAS)
+                    image = ImageTk.PhotoImage(image)
+                    
+                    return image
+                    
+                    
+                    #print('HÄÄÄÄÄÄÄÄR->',events[index].email.attachments)
+
+        
         header_font_size, timestamp_font_size, text_font_size = self.get_font_size(width, height)
         header_row_space = int((header_font_size*0.93 - header_font_size)/2)
         timestamp_row_space = int(timestamp_font_size*0.7/2)
@@ -116,7 +149,7 @@ class DisplayRow():
 
         img=PIL.Image.new("RGBA", (width, height),color)
         draw = PIL.ImageDraw.Draw(img)
-
+        
         #Heading
         col = self.config.getint('noticeboard', 'start_col')
         row = self.config.getint('noticeboard', 'start_row')

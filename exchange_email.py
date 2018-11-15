@@ -106,6 +106,7 @@ class Email():
                         #parse message
                         e = event.Event(message)
                         events.append(e)
+                        
                         if e.valid() and not (message.is_read or self.isreply(message)):
                             new_messages = True
                             l.debug('Sending confirmation email')
