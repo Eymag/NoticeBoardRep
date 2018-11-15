@@ -60,7 +60,8 @@ class Email():
     def select_mailbox(self, server, mailbox='Inbox'):
         '''Returns folder instance'''
         account = self.login(server)
-        folder = account.root.get_folder_by_name(mailbox)
+        #folder = account.root.get_folder_by_name(mailbox)
+        folder = account.inbox
         return folder, folder.total_count
 
     def get_events(self, max_amount=50):
