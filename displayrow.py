@@ -107,28 +107,25 @@ class DisplayRow():
         '''Creates a single note'''
         
         width, padd_width, height, padd_height = self.get_size()
+        
+        #If mail have attachement and image returns thumbnail
         if event.email.attachments:
-           for attach in event.email.attachments:
+           for attach in event.email.attachments:    
+                    if 'image' in attach.content_type:
+                        try:
+                            print('Image is present')
+                            img = attach.content
+                            attImg = Image.open(io.BytesIO(img))
+                            attImg.thumbnail((width,height), PIL.Image.ANTIALIAS)
+                            image = ImageTk.PhotoImage(attImg)
+                        except Exception as ex:
+                            print('AttachmentError:' , ex)
+                            break
+                        return image
+                    else:
+                        print('Attachment is not an image.')
+                        break
                     
-                    img = attach.content
-                    #image = Image.frombytes('RGBA', (300,300), img)
-                    
-                    attImg = Image.open(io.BytesIO(img))
-                    w,h = attImg.size 
-                    left = (w - width)/2
-                    top = (h - height)/2
-                    right = (w + width)/2
-                    bottom = (h + height)/2
-
-                  
-                    image= attImg.crop((left, top, right, bottom))
-                    #image = attImg.resize((width, height), Image.ANTIALIAS)
-                    image = ImageTk.PhotoImage(image)
-                    
-                    return image
-                    
-                    
-                    #print('HÄÄÄÄÄÄÄÄR->',events[index].email.attachments)
 
         
         header_font_size, timestamp_font_size, text_font_size = self.get_font_size(width, height)
