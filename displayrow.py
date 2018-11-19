@@ -1,6 +1,6 @@
 import tkinter
 import PIL 
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageDraw
 import random
 import io
 try:
@@ -74,7 +74,7 @@ class DisplayRow():
         '''Display events
 
         returns remaining events that does not fit on row'''
-        print(events)
+        
         if not self.widgets:self.make_widgets()
         num = min(len(self.widgets), len(events))
         for index in range(self.cols):
@@ -108,26 +108,7 @@ class DisplayRow():
         
         width, padd_width, height, padd_height = self.get_size()
         
-        #If mail have attachement and image returns thumbnail
-        if event.email.attachments:
-           for attach in event.email.attachments:    
-                    if 'image' in attach.content_type:
-                        try:
-                            print('Image is present')
-                            img = attach.content
-                            attImg = Image.open(io.BytesIO(img))
-                            attImg.thumbnail((width,height), PIL.Image.ANTIALIAS)
-                            image = ImageTk.PhotoImage(attImg)
-                        except Exception as ex:
-                            print('AttachmentError:' , ex)
-                            break
-                        return image
-                    else:
-                        print('Attachment is not an image.')
-                        break
-                    
-
-        
+     
         header_font_size, timestamp_font_size, text_font_size = self.get_font_size(width, height)
         header_row_space = int((header_font_size*0.93 - header_font_size)/2)
         timestamp_row_space = int(timestamp_font_size*0.7/2)
@@ -142,8 +123,39 @@ class DisplayRow():
         text_font = self.config.get('general', 'text_font')
         time_font = PIL.ImageFont.truetype(text_font, timestamp_font_size)
         
-        text_font = PIL.ImageFont.truetype(text_font, text_font_size)
+        pic_font = self.config.get('general', 'headline_font')
+        picture_font = PIL.ImageFont.truetype(pic_font, timestamp_font_size)
 
+        text_font = PIL.ImageFont.truetype(text_font, text_font_size)
+           #If mail have attachement and image returns thumbnail
+        if event.email.attachments:
+           for attach in event.email.attachments:    
+                    if 'image' in attach.content_type:
+                        try:
+                            #Load image, crop and make thumbnail
+                            img = attach.content
+                            attImg = Image.open(io.BytesIO(img))
+                            w,h = attImg.size
+
+                            if(not((w or h)<(width or height))): #If image smaller than notice no crop needed
+                                minlength = min(w,h)                 
+                                left = (w - minlength)/2
+                                top = (h - minlength)/2
+                                right = (w + minlength)/2
+                                bottom = (h + minlength)/2
+                                attImg = attImg.crop((left, top, right, bottom))
+
+                            attImg.thumbnail((width,height), PIL.Image.ANTIALIAS)
+                            image = ImageTk.PhotoImage(attImg)
+
+                        except Exception as ex:
+                            print('AttachmentError:' , ex)
+                            break
+                        return image
+                    else:
+                        print('Attachment is not an image.')
+                        break
+                    
         img=PIL.Image.new("RGBA", (width, height),color)
         draw = PIL.ImageDraw.Draw(img)
         
