@@ -2,23 +2,38 @@
 2. EXEMPEL ÅTERKOMMANDE HÄNDELSER 
 3. SYNTAX FÖR MEDDELANDE 
 4. EXTRA FUNKTIONER
+
+[LÄNK] : Tryck på länken bredvid [LÄNK]-> för att generera det exempel-meddelande som är beskrivet. 
+Obs! Mailet skickas inte vid tryck på länken utan förbereds endast, manuell avsändning erfordas.
 ---
 
 1. EXEMPEL ENSTAKA HÄNDELSE:
-[2017-04-13 12:00 ; 2017-04-20 08:00] Tar påskledigt och kommer tillbaka på onsdag. Trevlig helg!
+[2017-04-13 12:00 ; 2017-04-20 08:00] Tar påskledigt och kommer tillbaka på onsdag. Trevlig helg!  
 -visas fram till kl 08:00 på onsdagen efter påsk.
+[LÄNK]-> mailto:SE-LIN-TAVLAN@semcon.com?subject=%5B2017-04-13%2012%3A00%20%3B%202017-04-20%2008%3A00%5D%20Tar%20p%C3%A5skledigt%20och%20kommer%20tillbaka%20p%C3%A5%20onsdag.%20Trevlig%20helg!
+
 [2017-04-13] Jag tar ledigt på skärtorsdagen, ses igen efter påsk. Trevlig Helg!
 -visas hela skärtorsdagen 13 april.
+[LÄNK]-> mailto:SE-LIN-TAVLAN@semcon.com?subject=%5B2017-04-13%5D%20Jag%20tar%20ledigt%20p%C3%A5%20sk%C3%A4rtorsdagen%2C%20ses%20igen%20efter%20p%C3%A5sk.%20Trevlig%20Helg!
+
 [onsdag ; torsdag] Jag åker till Göteborg på kurs i två dagar.
 -visas från aktuellt datum till nästkommande torsdag.
+[LÄNK]-> mailto:SE-LIN-TAVLAN@semcon.com?subject=%5Bonsdag%20%3B%20torsdag%5D%20Jag%20%C3%A5ker%20till%20G%C3%B6teborg%20p%C3%A5%20kurs%20i%20tv%C3%A5%20dagar.
+
 Jag åker till Göteborg över dagen på kurs.
 -visas samma dag.
+[LÄNK]-> mailto:SE-LIN-TAVLAN@semcon.com?subject=Jag%20%C3%A5ker%20till%20G%C3%B6teborg%20%C3%B6ver%20dagen%20p%C3%A5%20kurs.
+
 
 2. EXEMPEL ÅTERKOMMANDE HÄNDELSER:
 [torsdagar 13:00 ; fredagar 17:00] Jag är föräldraledig torsdag em och fredagar.
 -ligger som permanent meddelande.
+[LÄNK]->mailto:SE-LIN-TAVLAN@semcon.com?subject=%5Btorsdagar%2013%3A00%20%3B%20fredagar%2017%3A00%5D%20Jag%20%C3%A4r%20f%C3%B6r%C3%A4ldraledig%20torsdag%20em%20och%20fredagar.
+
 [torsdagar] Jag är föräldraledig torsdagar.
 -ligger som permanent meddelande.
+[LÄNK]->mailto:SE-LIN-TAVLAN@semcon.com?subject=%5Btorsdagar%5D%20Jag%20%C3%A4r%20f%C3%B6r%C3%A4ldraledig%20torsdagar.
+
 
 3. SYNTAX FÖR MEDDELANDE
 [Giltigt från ; Giltigt till] Ditt meddelande
@@ -46,5 +61,7 @@ Giltighetstid i klarspråk:
 -ligger som permanent meddelande.
 
 4. EXTRA FUNKTIONER
-<help> : returnerar hjälptexten.
-<list> : returnerar aktuell information på anslagstavlan.
+<help> : returnerar hjälptexten. [LÄNK]-> mailto:SE-LIN-TAVLAN@semcon.com?subject=%3Chelp%3E
+<list> : returnerar aktuell information på anslagstavlan. [LÄNK]-> mailto:SE-LIN-TAVLAN@semcon.com?subject=%3Clist%3E
+<subscribe> : lägger till avsändarens mailadress som prenumerant på notisupdateringar. [LÄNK]-> mailto:SE-LIN-TAVLAN@semcon.com?subject=%3Csubscribe%3E
+<subscribe,unsubscribe> : tar bort avsändarens mailadress som preunumerant på notisupdateringar. [LÄNK]-> mailto:SE-LIN-TAVLAN@semcon.com?subject=%3Csubscribe%2Cunsubsribe%3E
