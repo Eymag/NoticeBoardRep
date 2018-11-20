@@ -1,5 +1,12 @@
 ﻿Release 3.6
+<<<<<<< HEAD
 Sub/Unsubscribe function updated
+=======
+<<<<<<< HEAD
+Sub/Unsubscribe function updated
+=======
+>>>>>>> 092ec3ae3cfc2f3b6f493f726bea9f1c20f7270d
+>>>>>>> d9cccfc8db97e09f8223e2999868cff0d02436bc
 Added condition for validation of events to avoid autoreply notice.
 Added condition for timestamp validation to cover more faulty timestamps.
 Changed to from Google-maps to Nominatim for fetching OSM data.

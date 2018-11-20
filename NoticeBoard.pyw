@@ -169,6 +169,8 @@ class NoticeBoard():
         msg = '\n'.join(msg)
         self.event_server.send(to, subject, msg)
 
+  
+            
     def delete(self, events, message, *args):
         '''Deletes message from mailbox'''
         item_id = re.match(r'\s?<delete>\s?(.*)', message.subject)

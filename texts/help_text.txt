@@ -65,3 +65,9 @@ Giltighetstid i klarspråk:
 <list> : returnerar aktuell information på anslagstavlan. [LÄNK]-> mailto:SE-LIN-TAVLAN@semcon.com?subject=%3Clist%3E
 <subscribe> : lägger till avsändarens mailadress som prenumerant på notisupdateringar. [LÄNK]-> mailto:SE-LIN-TAVLAN@semcon.com?subject=%3Csubscribe%3E
 <subscribe,unsubscribe> : tar bort avsändarens mailadress som preunumerant på notisupdateringar. [LÄNK]-> mailto:SE-LIN-TAVLAN@semcon.com?subject=%3Csubscribe%2Cunsubsribe%3E
+<<<<<<< HEAD
+=======
+
+Lägg till bild på tavlan: Skicka ett mail till tavlan med en bifogad bild. Ämnesrad krävs och används för att hålla isär på vad som är en bild och notis.
+Bilden beskärs till ett fyrkantigt format.
+>>>>>>> d9cccfc8db97e09f8223e2999868cff0d02436bc
