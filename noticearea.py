@@ -18,7 +18,7 @@ class NoticeArea():
         #bg = 'green'
         middle = tkinter.Frame(self.f, bg=bg)
         middle.pack(side='left',fill=tkinter.BOTH, expand=1)
-
+        
         #bg = 'red'
         tkinter.Frame(self.f,
                       bg=bg,

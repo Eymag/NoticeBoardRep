@@ -108,6 +108,7 @@ class DisplayRow():
         
         width, padd_width, height, padd_height = self.get_size()
         
+
         header_font_size, timestamp_font_size, text_font_size = self.get_font_size(width, height)
         header_row_space = int((header_font_size*0.93 - header_font_size)/2)
         timestamp_row_space = int(timestamp_font_size*0.7/2)
@@ -126,6 +127,7 @@ class DisplayRow():
         picture_font = PIL.ImageFont.truetype(pic_font, timestamp_font_size)
 
         text_font = PIL.ImageFont.truetype(text_font, text_font_size)
+
            
         #If mail have attachement and image returns thumbnail
         if event.email.attachments:
@@ -158,6 +160,29 @@ class DisplayRow():
                             attImg = attImg.crop((left, top, right, bottom))
                             attImg.thumbnail((width,height), PIL.Image.ANTIALIAS)
                             image = ImageTk.PhotoImage(attImg)
+
+
+           #If mail have attachement and image returns thumbnail
+        if event.email.attachments:
+           for attach in event.email.attachments:    
+                    if 'image' in attach.content_type:
+                        try:
+                            #Load image, crop and make thumbnail
+                            img = attach.content
+                            attImg = Image.open(io.BytesIO(img))
+                            w,h = attImg.size
+
+                            if(not((w or h)<(width or height))): #If image smaller than notice no crop needed
+                                minlength = min(w,h)                 
+                                left = (w - minlength)/2
+                                top = (h - minlength)/2
+                                right = (w + minlength)/2
+                                bottom = (h + minlength)/2
+                                attImg = attImg.crop((left, top, right, bottom))
+
+                            attImg.thumbnail((width,height), PIL.Image.ANTIALIAS)
+                            image = ImageTk.PhotoImage(attImg)
+
 
                         except Exception as ex:
                             print('AttachmentError:' , ex)
