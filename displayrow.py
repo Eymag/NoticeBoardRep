@@ -1,6 +1,13 @@
 import tkinter
-import PIL
+import PIL 
+from PIL import Image, ImageTk, ImageDraw
 import random
+import io
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
+
 
 class DisplayRow():
     '''Class to controll one row of notices'''
@@ -67,6 +74,7 @@ class DisplayRow():
         '''Display events
 
         returns remaining events that does not fit on row'''
+        
         if not self.widgets:self.make_widgets()
         num = min(len(self.widgets), len(events))
         for index in range(self.cols):
@@ -97,7 +105,9 @@ class DisplayRow():
                   
     def create_note(self, event):
         '''Creates a single note'''
+        
         width, padd_width, height, padd_height = self.get_size()
+        
         header_font_size, timestamp_font_size, text_font_size = self.get_font_size(width, height)
         header_row_space = int((header_font_size*0.93 - header_font_size)/2)
         timestamp_row_space = int(timestamp_font_size*0.7/2)
@@ -112,11 +122,54 @@ class DisplayRow():
         text_font = self.config.get('general', 'text_font')
         time_font = PIL.ImageFont.truetype(text_font, timestamp_font_size)
         
-        text_font = PIL.ImageFont.truetype(text_font, text_font_size)
+        pic_font = self.config.get('general', 'headline_font')
+        picture_font = PIL.ImageFont.truetype(pic_font, timestamp_font_size)
 
+        text_font = PIL.ImageFont.truetype(text_font, text_font_size)
+           
+        #If mail have attachement and image returns thumbnail
+        if event.email.attachments:
+           for attach in event.email.attachments:    
+                    if 'image' in attach.content_type:
+                        try: 
+                            a = width
+                            b = height
+                            #Load image, crop and make thumbnail
+                            img = attach.content
+                            attImg = Image.open(io.BytesIO(img))
+                            x,y = attImg.size
+                            xyRatio = (x/y)
+                            abRatio = (a/b)
+                            
+                            if xyRatio > abRatio: #Y is fixed
+                                w = (x-((y*a)/b))
+                                left = int((w/2))
+                                top = 0
+                                right = int(x - (w/2))
+                                bottom = int(y)
+                               
+                            else: #X is fixed
+                                w = (y-((x*b)/a))
+                                left = 0
+                                top = int((w/2))
+                                right = int(x)
+                                bottom = int(y - (w/2))
+                                
+                            attImg = attImg.crop((left, top, right, bottom))
+                            attImg.thumbnail((width,height), PIL.Image.ANTIALIAS)
+                            image = ImageTk.PhotoImage(attImg)
+
+                        except Exception as ex:
+                            print('AttachmentError:' , ex)
+                            break
+                        return image
+                    else:
+                        print('Attachment is not an image.')
+                        break
+                    
         img=PIL.Image.new("RGBA", (width, height),color)
         draw = PIL.ImageDraw.Draw(img)
-
+        
         #Heading
         col = self.config.getint('noticeboard', 'start_col')
         row = self.config.getint('noticeboard', 'start_row')
