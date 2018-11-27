@@ -133,56 +133,44 @@ class DisplayRow():
         if event.email.attachments:
            for attach in event.email.attachments:    
                     if 'image' in attach.content_type:
+                        #Load image, crop if to large, resize if to small.
                         try: 
-                            a = width
+                            a = width 
                             b = height
-                            #Load image, crop and make thumbnail
+   
                             img = attach.content
                             attImg = Image.open(io.BytesIO(img))
-                            x,y = attImg.size
+                            x,y = attImg.copy().size
                             xyRatio = (x/y)
                             abRatio = (a/b)
-                            
-                            if xyRatio > abRatio: #Y is fixed
-                                w = (x-((y*a)/b))
-                                left = int((w/2))
-                                top = 0
-                                right = int(x - (w/2))
-                                bottom = int(y)
+
+                            if (x < a or y < b):
+                                background = Image.new('RGBA', (a, b), (211, 211, 211, 211))
+                                attImgRe = attImg.resize((int(x*0.75),int(y*0.75)), PIL.Image.ANTIALIAS)
+                                x1 , y1 = attImgRe.size
+                                offset = ((a - x1) // 2, (b - y1) // 2)
+                                background.paste(attImgRe, offset)
+                                attImg = background
+
+                            else:
+                                if xyRatio > abRatio: #Y is fixed
+                                    w = (x-((y*a)/b))
+                                    left = int((w/2))
+                                    top = 0
+                                    right = int(x - (w/2))
+                                    bottom = int(y)
                                
-                            else: #X is fixed
-                                w = (y-((x*b)/a))
-                                left = 0
-                                top = int((w/2))
-                                right = int(x)
-                                bottom = int(y - (w/2))
+                                else: #X is fixed
+                                    w = (y-((x*b)/a))
+                                    left = 0
+                                    top = int((w/2))
+                                    right = int(x)
+                                    bottom = int(y - (w/2))
                                 
-                            attImg = attImg.crop((left, top, right, bottom))
-                            attImg.thumbnail((width,height), PIL.Image.ANTIALIAS)
-                            image = ImageTk.PhotoImage(attImg)
-
-
-           #If mail have attachement and image returns thumbnail
-        if event.email.attachments:
-           for attach in event.email.attachments:    
-                    if 'image' in attach.content_type:
-                        try:
-                            #Load image, crop and make thumbnail
-                            img = attach.content
-                            attImg = Image.open(io.BytesIO(img))
-                            w,h = attImg.size
-
-                            if(not((w or h)<(width or height))): #If image smaller than notice no crop needed
-                                minlength = min(w,h)                 
-                                left = (w - minlength)/2
-                                top = (h - minlength)/2
-                                right = (w + minlength)/2
-                                bottom = (h + minlength)/2
                                 attImg = attImg.crop((left, top, right, bottom))
 
                             attImg.thumbnail((width,height), PIL.Image.ANTIALIAS)
                             image = ImageTk.PhotoImage(attImg)
-
 
                         except Exception as ex:
                             print('AttachmentError:' , ex)
